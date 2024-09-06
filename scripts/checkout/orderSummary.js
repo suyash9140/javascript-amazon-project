@@ -1,36 +1,23 @@
 import {cart, removeFromC,updateDelivery} from '../../data/cart.js';
-import {products} from '../../data/products.js';
+import {getProduct} from '../../data/products.js';
 import { formatC } from '../utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import {deliveryOptions} from '../../data/deliveryOptions.js'
+import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js'
 
 
 
- export function render(){
+ export function renderOrderSummary(){
 
   let cartSummary='';
 
   cart.forEach((cartItem) =>{
     
     const productId =cartItem.productId;
-    let matchingProduct;
-
-    products.forEach((product)=>{
-        if(product.id===productId){
-          matchingProduct=product;
-        }
-    });
+    const matchingProduct=getProduct(productId);
 
     const deliveryOptionId = cartItem.deliveryOptionId;
     
-    let deliveryOption;
-
-    deliveryOptions.forEach((option)=>{
-        if(option.id===deliveryOptionId){
-          deliveryOption=option;
-        
-        }
-    });
+    let deliveryOption=getDeliveryOption(deliveryOptionId);
     
     
       const today=dayjs();
@@ -134,7 +121,7 @@ import {deliveryOptions} from '../../data/deliveryOptions.js'
       const productId = element.dataset.productId;
       const deliveryOptionId = element.dataset.deliveryId;
     updateDelivery(productId,deliveryOptionId);
-    render();
+    renderOrderSummary;
     });
   });
 };
