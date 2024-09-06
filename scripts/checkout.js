@@ -1,11 +1,10 @@
-import {cart, removeFromC} from '../data/cart.js';
+import {cart, removeFromC,updateDelivery} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatC } from './utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import {deliveryOptions} from '../data/deliveryOptions.js'
 
-const today=dayjs();
-const deliverydate=today.add(7,'days');
+
 
 
 
@@ -13,7 +12,7 @@ const deliverydate=today.add(7,'days');
 let cartSummary='';
 
 cart.forEach((cartItem) =>{
-
+  
    const productId =cartItem.productId;
    let matchingProduct;
 
@@ -24,13 +23,17 @@ cart.forEach((cartItem) =>{
    });
 
    const deliveryOptionId = cartItem.deliveryOptionId;
+   
    let deliveryOption;
 
    deliveryOptions.forEach((option)=>{
        if(option.id===deliveryOptionId){
         deliveryOption=option;
+       
        }
    });
+   
+   
     const today=dayjs();
     const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
     const dateString = deliveryDate.format('dddd, MMMM D');
@@ -90,7 +93,9 @@ function deliveryOptionsHTML(matchingProduct,cartItem){
       const priceString = deliveryOption.priceCents===0 ? 'FREE' : `$${formatC(deliveryOption.priceCents)} -`;
       const ischecked = deliveryOption.id === cartItem.deliveryOptionId;
       deliveryHTML+=
-      `<div class="delivery-option">
+      `<div class="delivery-option js-delivery-option"
+      data-product-id="${matchingProduct.id}"
+      data-delivery-id="${deliveryOption.id}">
         <input type="radio" ${ischecked ? 'checked': ''}
           class="delivery-option-input"
           name="${matchingProduct.id}">
@@ -123,4 +128,12 @@ forEach((link) => {
      console.log(cont);
      cont.remove();
    });
+});
+
+document.querySelectorAll('.js-delivery-option').forEach((element)=>{
+  element.addEventListener('click',()=>{
+    const productId = element.dataset.productId;
+    const deliveryOptionId = element.dataset.deliveryId;
+   updateDelivery(productId,deliveryOptionId);
+  });
 });
