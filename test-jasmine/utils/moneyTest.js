@@ -1,4 +1,4 @@
-import { formatC } from "../scripts/utils/money.js";
+import { formatC } from "../../scripts/utils/money.js";
 
 describe('test suite: formatC', ()=>{
    it('converts cents into dollars', ()=>{
