@@ -1,4 +1,4 @@
-import { formatC } from "../scripts/utils/money.js";
+import { formatC } from "../../scripts/utils/money.js";
 
 console.log('test suite: formatC');
 
